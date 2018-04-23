@@ -62,11 +62,7 @@ public class Controleur extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null) {
             actionAccueil(request, response);
-        }
-        else if (action.equals("login")) {
-            actionLogin(request, response);
-        }
-      
+        }      
     }
     
     private void actionAccueil(HttpServletRequest request, HttpServletResponse response)
@@ -81,11 +77,46 @@ public class Controleur extends HttpServlet {
     
     private void actionLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String type = request.getParameter("type");
         try {
-            System.out.println("test ON EST AL PAS TOUT SUL");
-            request.getRequestDispatcher("WEB-INF/listAnimations.html").forward(request, response);
+            if (type.equals("parents")) {
+                request.getRequestDispatcher("WEB-INF/AccueilParents.html").forward(request, response);
+            } else if (type.equals("mairie")) {
+                request.getRequestDispatcher("WEB-INF/AccueilMairie.html").forward(request, response);
+            } else {
+                request.getRequestDispatcher("WEB-INF/AccueilEtablissement.html").forward(request, response);
+            }
+            
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : fichier listAnimations.html introuvable");
+            if (type.equals("parents")) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : AccueilParents.html introuvable");
+            } else if (type.equals("mairie")) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : AccueilMairie.html introuvable");
+            } else if (type.equals("etablissement")) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : AccueilEtablissement introuvable");
+            } else {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : choix introuvable");
+            }
+            return;
+        }
+    }
+    
+    private void actionInfos(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/infos.html").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : infos.html");
+            return;
+        }
+    }
+
+    private void actionFacture(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/facture.html").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : facture.html");
             return;
         }
     }
@@ -107,6 +138,10 @@ public class Controleur extends HttpServlet {
         String action = request.getParameter("action");
         if (action.equals("login")) {
             actionLogin(request,response);
+        } else if (action.equals("infos")) {
+            actionInfos(request,response);
+        } else if (action.equals("facture")) {
+            actionFacture(request,response);
         }
     }
 
