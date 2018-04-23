@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author morel2
  */
-@WebServlet(name = "Controleur", urlPatterns = {"/Controleur"})
+@WebServlet(name = "Controleur", urlPatterns = {"/controleur"})
 public class Controleur extends HttpServlet {
 
     /**
@@ -62,9 +62,11 @@ public class Controleur extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null) {
             actionAccueil(request, response);
-        } else if (action == "login") {
-            actionLogin(request,response);
         }
+        else if (action.equals("login")) {
+            actionLogin(request, response);
+        }
+      
     }
     
     private void actionAccueil(HttpServletRequest request, HttpServletResponse response)
@@ -80,9 +82,10 @@ public class Controleur extends HttpServlet {
     private void actionLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+            System.out.println("test ON EST AL PAS TOUT SUL");
+            request.getRequestDispatcher("WEB-INF/listAnimations.html").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : fichier accueil.html introuvable");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : fichier listAnimations.html introuvable");
             return;
         }
     }
@@ -98,7 +101,13 @@ public class Controleur extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        if (action.equals("login")) {
+            actionLogin(request,response);
+        }
     }
 
     /**
