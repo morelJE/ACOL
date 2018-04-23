@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.bibli;
+package controleur;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,14 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
 
 /**
  *
  * @author morel2
  */
-@WebServlet(name = "CheckUser", urlPatterns = {"/checkuser"})
-public class CheckUser extends HttpServlet {
+@WebServlet(name = "Controleur", urlPatterns = {"/Controleur"})
+public class Controleur extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,24 +31,21 @@ public class CheckUser extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String login = request.getParameter("login");
-            String type = request.getParameter("type");
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckUser</title>");            
+            out.println("<title>Servlet Controleur</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<a href=\"index.html\">accueil</a>");
+            out.println("<h1>Servlet Controleur at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
-            Cookie cookie = new Cookie("utilisateur", login);
-            response.addCookie(cookie);
         }
     }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -62,7 +58,33 @@ public class CheckUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        if (action == null) {
+            actionAccueil(request, response);
+        } else if (action == "login") {
+            actionLogin(request,response);
+        }
+    }
+    
+    private void actionAccueil(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : fichier accueil.html introuvable");
+            return;
+        }
+    }
+    
+    private void actionLogin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : fichier accueil.html introuvable");
+            return;
+        }
     }
 
     /**
