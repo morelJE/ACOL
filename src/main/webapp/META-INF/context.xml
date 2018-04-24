@@ -9,7 +9,7 @@
    maxIdle="1"
    maxWaitMillis="20000"
    name="jdbc/acol"
-   password="hamme"
-   username="acol"
+   username="hamme"
+   password="acol"
    />
 </Context>

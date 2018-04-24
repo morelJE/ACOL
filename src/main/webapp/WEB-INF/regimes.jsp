@@ -29,7 +29,7 @@
         <h1>Listes des régimes</h1>
         <form>
             <% for (int i = 0; i < regimes.size(); i++) {
-                    out.print(regimes.get(i));
+                    out.println(regimes.get(i)+"</br>");
                }
             %>
         </form>
