@@ -20,8 +20,14 @@ public class regimeDao {
         this.ds = ds;
     }
     
-    public void ajoutRegime(String regime) {
-        
+    public void ajoutRegime(String regime) throws SQLException {
+        System.out.println("coucou");
+        try (Connection c = ds.getConnection()) {
+            System.out.println("INSERT INTO TREGIME (REGIME) VALUES (' +" + regime + "')");
+            PreparedStatement p = c.prepareStatement("INSERT INTO TREGIME (REGIME) VALUES ('?')");
+            p.setString(1, regime);
+            p.executeQuery();
+        }
     }
     
     public void enleveRegime(String regime) {
