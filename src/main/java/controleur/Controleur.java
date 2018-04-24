@@ -5,13 +5,17 @@
  */
 package controleur;
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import dao.regimeDao;
 
 /**
  *
@@ -19,6 +23,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Controleur", urlPatterns = {"/controleur"})
 public class Controleur extends HttpServlet {
+    
+    @Resource(name = "jdbc/ACOL")
+    private DataSource ds;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,7 +53,6 @@ public class Controleur extends HttpServlet {
         }
     }
     
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -120,6 +126,39 @@ public class Controleur extends HttpServlet {
             return;
         }
     }
+    
+    private void actionGroupe(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/recuperation.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : recuperation.jsp");
+            return;
+        }
+    }
+    
+    private void actionRegime(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : regimes.jsp");
+            return;
+        }
+    }
+    
+    private void actionAjouterRegime(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String regime = request.getParameter("regime");
+            regimeDao regDao = new regimeDao(ds);
+            regDao.ajoutRegime(regime);
+            request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "");
+            return;
+        }
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -142,6 +181,12 @@ public class Controleur extends HttpServlet {
             actionInfos(request,response);
         } else if (action.equals("facture")) {
             actionFacture(request,response);
+        } else if (action.equals("groupes")) {
+            actionGroupe(request,response);
+        } else if (action.equals("regime")) {
+            actionRegime(request,response);
+        } else if (action.equals("ajouterRegime")) {
+            actionAjouterRegime(request,response);
         }
     }
 
