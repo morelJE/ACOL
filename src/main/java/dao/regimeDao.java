@@ -25,7 +25,7 @@ public class regimeDao {
     
     public void ajoutRegime(String regime) throws SQLException {
         try (Connection c = ds.getConnection()) {
-            PreparedStatement p = c.prepareStatement("INSERT INTO TREGIME VALUES ('?')");
+            PreparedStatement p = c.prepareStatement("INSERT INTO TREGIME VALUES (?)");
             p.setString(1, regime);
             ResultSet rs = p.executeQuery();
         } catch (SQLException e) {
