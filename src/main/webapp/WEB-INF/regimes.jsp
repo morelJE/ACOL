@@ -10,7 +10,7 @@
 
 <%!
 
-    @Resource(name = "jdbc/ACOL")
+    @Resource(name = "jdbc/acol")
     private DataSource ds;
 %>
 

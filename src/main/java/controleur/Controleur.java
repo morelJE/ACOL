@@ -24,7 +24,7 @@ import dao.regimeDao;
 @WebServlet(name = "Controleur", urlPatterns = {"/controleur"})
 public class Controleur extends HttpServlet {
     
-    @Resource(name = "jdbc/ACOL")
+    @Resource(name = "jdbc/acol")
     private DataSource ds;
 
     /**
