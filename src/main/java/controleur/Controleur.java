@@ -112,7 +112,7 @@ public class Controleur extends HttpServlet {
         try {
             request.getRequestDispatcher("WEB-INF/infos.html").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : infos.html");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : infos.html introuvable");
             return;
         }
     }
@@ -122,7 +122,7 @@ public class Controleur extends HttpServlet {
         try {
             request.getRequestDispatcher("WEB-INF/facture.html").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : facture.html");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : facture.html introuvable");
             return;
         }
     }
@@ -132,7 +132,7 @@ public class Controleur extends HttpServlet {
         try {
             request.getRequestDispatcher("WEB-INF/recuperation.jsp").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : recuperation.jsp");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : recuperation.jsp introuvable");
             return;
         }
     }
@@ -142,7 +142,7 @@ public class Controleur extends HttpServlet {
         try {
             request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : regimes.jsp");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : regimes.jsp introuvable");
             return;
         }
     }
@@ -155,11 +155,20 @@ public class Controleur extends HttpServlet {
             regDao.ajoutRegime(regime);
             request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : regimes.jsp introuvable");
             return;
         }
     }
 
+    private void actionEnfants(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfants.jsp introuvable");
+            return;
+        }
+    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -187,6 +196,8 @@ public class Controleur extends HttpServlet {
             actionRegime(request,response);
         } else if (action.equals("ajouterRegime")) {
             actionAjouterRegime(request,response);
+        } else if (action.equals("enfants")) {
+            actionEnfants(request,response);
         }
     }
 

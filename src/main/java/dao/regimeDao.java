@@ -7,6 +7,9 @@ package dao;
 
 import java.sql.*;
 import javax.sql.DataSource;
+import java.util.LinkedList;
+import java.util.List;
+import modele.regime;
 
 /**
  *
@@ -21,9 +24,7 @@ public class regimeDao {
     }
     
     public void ajoutRegime(String regime) throws SQLException {
-        System.out.println("coucou");
         try (Connection c = ds.getConnection()) {
-            System.out.println("INSERT INTO TREGIME (REGIME) VALUES (' +" + regime + "')");
             PreparedStatement p = c.prepareStatement("INSERT INTO TREGIME (REGIME) VALUES ('?')");
             p.setString(1, regime);
             p.executeQuery();
@@ -32,5 +33,20 @@ public class regimeDao {
     
     public void enleveRegime(String regime) {
         
+    }
+    
+    public List<regime> getRegimes() throws SQLException {
+        List regimes = new LinkedList();
+        try (Connection c = ds.getConnection()) {
+            PreparedStatement p = c.prepareStatement("SELECT REGIME FROM TREGIME");
+            ResultSet rs = p.executeQuery();
+            while (rs.next()) {
+                String regime = rs.getString(1);
+                regimes.add(regime);
+            }
+        } catch (SQLException e) {
+            System.out.println("gngrnejogoiehqrgiqruepog");
+        }
+        return regimes;
     }
 }

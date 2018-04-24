@@ -1,6 +1,24 @@
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@ page import="javax.sql.DataSource" %>
+<%@ page import="javax.annotation.Resource" %>
+<%@ page import="java.util.LinkedList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="dao.regimeDao" %>
+
+<%!
+
+    @Resource(name = "jdbc/ACOL")
+    private DataSource ds;
+%>
+
+<%
+    regimeDao regDao = new regimeDao(ds);
+    List regimes = regDao.getRegimes();
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,6 +27,14 @@
     </head>
     <body>
         <h1>Listes des régimes</h1>
+        <form>
+            <% for (int i = 0; i < regimes.size(); i++) {
+                    out.print(regimes.get(i));
+               }
+            %>
+        </form>
+            
+
         
         <form action="controleur" method="post" accept-charset="UTF-8">
             <input type="text" name="regime" />
