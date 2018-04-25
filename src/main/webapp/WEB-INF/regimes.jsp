@@ -10,7 +10,7 @@
 
 <%!
 
-    @Resource(name = "jdbc/ACOL")
+    @Resource(name = "jdbc/acol")
     private DataSource ds;
 %>
 
@@ -24,12 +24,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
         <h1>Listes des régimes</h1>
         <form>
             <% for (int i = 0; i < regimes.size(); i++) {
-                    out.print(regimes.get(i));
+                    out.println(regimes.get(i)+"</br>");
                }
             %>
         </form>
