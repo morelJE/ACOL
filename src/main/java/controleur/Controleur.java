@@ -6,6 +6,9 @@
 package controleur;
 
 
+import dao.CheckEtablissementDao;
+import dao.CheckMairieDao;
+import dao.CheckParentDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.annotation.Resource;
@@ -16,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import dao.regimeDao;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -86,11 +90,38 @@ public class Controleur extends HttpServlet {
         String type = request.getParameter("type");
         try {
             if (type.equals("parents")) {
-                request.getRequestDispatcher("WEB-INF/AccueilParents.html").forward(request, response);
+                CheckParentDao checkParent = new CheckParentDao(ds);
+                if (checkParent.isLoginValid(request, response)) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("utilisateur", request.getParameter("login"));
+                    request.getRequestDispatcher("WEB-INF/AccueilParents.html").forward(request, response);
+                    
+                }
+                else{
+                    request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+                }
             } else if (type.equals("mairie")) {
-                request.getRequestDispatcher("WEB-INF/AccueilMairie.html").forward(request, response);
+                CheckMairieDao checkMairie = new CheckMairieDao(ds);
+                if (checkMairie.isLoginValid(request, response)) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("utilisateur", request.getParameter("login"));
+                    request.getRequestDispatcher("WEB-INF/AccueilMairie.html").forward(request, response);
+                    
+                }
+                else{
+                    request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+                }
             } else {
-                request.getRequestDispatcher("WEB-INF/AccueilEtablissement.html").forward(request, response);
+                CheckEtablissementDao checkEtabli = new CheckEtablissementDao(ds);
+                if (checkEtabli.isLoginValid(request, response)) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("utilisateur", request.getParameter("login"));
+                    request.getRequestDispatcher("WEB-INF/AccueilEtablissement.html").forward(request, response);
+                    
+                }
+                else{
+                    request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+                }
             }
             
         } catch (Exception e) {
