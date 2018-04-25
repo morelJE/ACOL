@@ -1,24 +1,17 @@
-
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <%@ page import="javax.sql.DataSource" %>
 <%@ page import="javax.annotation.Resource" %>
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="dao.regimeDao" %>
-
 <%!
-
     @Resource(name = "jdbc/acol")
     private DataSource ds;
 %>
-
 <%
     regimeDao regDao = new regimeDao(ds);
     List regimes = regDao.getRegimes();
 %>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,14 +22,19 @@
     <body>
         <h1>Listes des régimes</h1>
         <form>
-            <% for (int i = 0; i < regimes.size(); i++) {
-                    out.println(regimes.get(i)+"</br>");
+            <%  //out.println("</br>");
+                for (int i = 0; i < regimes.size() - 1; i++) {
+                    out.println("\t\t\t<p>" + regimes.get(i) + "<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
+                    //out.println("\t\t\t<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
+                    out.println("\t\t\t\t<input type=\"submit\" value=\"Supprimer\" />");
+                    out.println("\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"supprRegime " + regimes.get(i) + "\" />");
+                    out.println("\t\t\t</form></p>");
                }
             %>
         </form>
             
 
-        
+        <h1>Ajouter un régime</h1>
         <form action="controleur" method="post" accept-charset="UTF-8">
             <input type="text" name="regime" />
             <input type="submit" value="Ajouter" />

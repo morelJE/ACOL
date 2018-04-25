@@ -34,7 +34,15 @@ public class regimeDao {
     }
     
     public void enleveRegime(String regime) {
-        
+        System.out.println("enleve regime");
+        try (Connection c = ds.getConnection()) {
+            PreparedStatement p = c.prepareStatement("DELETE FROM TREGIME WHERE REGIME=?");
+            System.out.println(regime);
+            p.setString(1, regime);
+            ResultSet rs = p.executeQuery();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     public List<regime> getRegimes() throws SQLException {

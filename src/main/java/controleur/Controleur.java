@@ -169,6 +169,20 @@ public class Controleur extends HttpServlet {
             return;
         }
     }
+    
+    private void actionSupprimerRegime(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String act = request.getParameter("action");
+            regimeDao regDao = new regimeDao(ds);
+            System.out.println(act.substring(12));
+            regDao.enleveRegime(act.substring(12));
+            request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : regimes.jsp introuvable");
+            return;
+        }
+    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -198,6 +212,10 @@ public class Controleur extends HttpServlet {
             actionAjouterRegime(request,response);
         } else if (action.equals("enfants")) {
             actionEnfants(request,response);
+        } else if (action.substring(0,11).equals("supprRegime")) {
+            actionSupprimerRegime(request,response);
+        } else {
+            System.out.println(action);
         }
     }
 
