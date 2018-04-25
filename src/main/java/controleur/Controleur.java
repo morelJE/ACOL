@@ -6,10 +6,9 @@
 package controleur;
 
 
-import dao.CheckEtablissementDao;
-import dao.CheckMairieDao;
-import dao.CheckParentDao;
-import dao.ParentDao;
+
+
+import dao.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.annotation.Resource;
@@ -19,10 +18,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import dao.regimeDao;
+
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+
 import javax.servlet.http.HttpSession;
 
 /**
@@ -114,7 +115,7 @@ public class Controleur extends HttpServlet {
                     request.getRequestDispatcher("WEB-INF/AccueilMairie.html").forward(request, response);
                     
                 }
-                else{
+                else {
                     request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
                 }
             } else {
@@ -211,6 +212,8 @@ public class Controleur extends HttpServlet {
     private void actionEnfants(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            request.setAttribute("enfants", enf);
             request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfants.jsp introuvable");
@@ -223,7 +226,6 @@ public class Controleur extends HttpServlet {
         try {
             String act = request.getParameter("action");
             regimeDao regDao = new regimeDao(ds);
-            System.out.println(act.substring(12));
             regDao.enleveRegime(act.substring(12));
             request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
         } catch (Exception e) {
