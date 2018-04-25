@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modele;
 
-/**
- *
- * @author morel2
- */
 public enum categorie {
     CANTINE,
     GARDERIE0,
@@ -16,4 +7,17 @@ public enum categorie {
     GARDERIE2,
     GARDERIE3,
     ANIMATION;
+    
+    private double tarifCantine = 2.5;
+    private double tarifGarderie = 1;
+    
+    public double getTarif(categorie categorie) {
+        if (categorie == categorie.CANTINE) {
+            return tarifCantine;
+        } else if (categorie == ANIMATION) {
+            return 0;
+        } else {
+            return tarifGarderie;
+        }
+    }
 }
