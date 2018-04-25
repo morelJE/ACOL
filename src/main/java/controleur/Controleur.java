@@ -184,15 +184,6 @@ public class Controleur extends HttpServlet {
         }
     }
         
-    private void actionPrixTap(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            request.getRequestDispatcher("WEB-INF/prixTap.jsp").forward(request, response);
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : prixTap.jsp introuvable");
-            return;
-        }
-    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -225,7 +216,7 @@ public class Controleur extends HttpServlet {
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
         } else if (action.equals("prixTap")) {
-            actionPrixTap(request,response);
+            //actionPrixTap(request,response);
         } else {
             System.out.println(action);
         }

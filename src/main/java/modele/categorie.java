@@ -11,6 +11,14 @@ public enum categorie {
     private double tarifCantine = 2.5;
     private double tarifGarderie = 1;
     
+    public double getTarifCantine() {
+        return tarifCantine;
+    }
+    
+    public double getTarifGarderie() {
+        return tarifGarderie;
+    }
+    
     public double getTarif(categorie categorie) {
         if (categorie == categorie.CANTINE) {
             return tarifCantine;
