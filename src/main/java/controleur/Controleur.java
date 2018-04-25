@@ -214,6 +214,7 @@ public class Controleur extends HttpServlet {
             return;
         }
     }
+        
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -245,6 +246,8 @@ public class Controleur extends HttpServlet {
             actionEnfants(request,response);
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
+        } else if (action.equals("prixTap")) {
+            //actionPrixTap(request,response);
         } else {
             System.out.println(action);
         }

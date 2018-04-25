@@ -1,19 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modele;
 
-/**
- *
- * @author morel2
- */
 public class tap {
-    private int tarif;
+    private double tarif;
     private categorie categorie;
     
-    public int getTarif() {
+    public double getTarif() {
         return this.tarif;
     }
     
@@ -21,8 +12,16 @@ public class tap {
         return this.categorie;
     }
     
-    public tap(int tarif, categorie cat) {
+    public void setTarif(double tarif) {
         this.tarif = tarif;
+    }
+    
+    public void setCategorie(categorie categorie) {
+        this.categorie = categorie;
+    }
+    
+    public tap(categorie cat) {
         this.categorie = cat;
+        this.tarif = cat.getTarif(cat);
     }
 }

@@ -25,7 +25,6 @@
             <%  //out.println("</br>");
                 for (int i = 0; i < regimes.size() - 1; i++) {
                     out.println("\t\t\t<p>" + regimes.get(i) + "<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
-                    //out.println("\t\t\t<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
                     out.println("\t\t\t\t<input type=\"submit\" value=\"Supprimer\" />");
                     out.println("\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"supprRegime " + regimes.get(i) + "\" />");
                     out.println("\t\t\t</form></p>");
