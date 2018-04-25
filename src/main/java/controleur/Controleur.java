@@ -9,6 +9,7 @@ package controleur;
 import dao.CheckEtablissementDao;
 import dao.CheckMairieDao;
 import dao.CheckParentDao;
+import dao.ParentDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.annotation.Resource;
@@ -19,6 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import dao.regimeDao;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -92,8 +96,10 @@ public class Controleur extends HttpServlet {
             if (type.equals("parents")) {
                 CheckParentDao checkParent = new CheckParentDao(ds);
                 if (checkParent.isLoginValid(request, response)) {
+                    ParentDao parent = new ParentDao(ds, request.getParameter("login"));
                     HttpSession session = request.getSession();
                     session.setAttribute("utilisateur", request.getParameter("login"));
+                    session.setAttribute("parent", parent);
                     request.getRequestDispatcher("WEB-INF/AccueilParents.html").forward(request, response);
                     
                 }
@@ -141,11 +147,22 @@ public class Controleur extends HttpServlet {
     private void actionInfos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            request.getRequestDispatcher("WEB-INF/infos.html").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/RemplissageCoordonnes.html").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : infos.html introuvable");
             return;
         }
+    }
+    
+    private void actionInfosRemplies(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession();
+        
+        try {
+            ((ParentDao) session.getAttribute("parent")).updateInfos(request.getParameter("telephone"), request.getParameter("adresse"));
+        } catch (SQLException ex) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : Update des informations impossible");        
+        }
+        request.getRequestDispatcher("WEB-INF/AccueilParents.html").forward(request, response);
     }
 
     private void actionFacture(HttpServletRequest request, HttpServletResponse response)
@@ -248,7 +265,10 @@ public class Controleur extends HttpServlet {
             actionSupprimerRegime(request,response);
         } else if (action.equals("prixTap")) {
             //actionPrixTap(request,response);
-        } else {
+        } else if (action.equals("inforemplies")) {
+            actionInfosRemplies(request, response);
+        } 
+        else {
             System.out.println(action);
         }
     }
@@ -262,5 +282,7 @@ public class Controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
 
 }

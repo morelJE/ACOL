@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Coordonnées</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+    <body>
+        <h1>Veuillez renseigner vos coordonnées</h1>
+
+        <form action="controleur" method="post" accept-charset="UTF-8">
+            
+            <ul>
+                <li> Téléphone : <input type="text" name="telephone"/></li>
+                <li> Adresse : <input type="text" name="adresse"/></li>
+            </ul>
+            <input type="submit" value="Envoyer" />
+            <input type ="hidden" name="action" value ="inforemplies" />
+        </form>
+        
+    </body>
+</html>
