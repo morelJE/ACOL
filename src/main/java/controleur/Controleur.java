@@ -267,6 +267,18 @@ public class Controleur extends HttpServlet {
         }
     }
         
+    private void actionAnimations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        try {
+            request.getRequestDispatcher("WEB-INF/AjoutAnimation.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : recuperation.jsp introuvable");
+            return;
+        }
+        
+    }
+
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -302,6 +314,9 @@ public class Controleur extends HttpServlet {
             actionFormulaireInscription(request, response);
         } else if (action.equals("inforemplies")) {
             actionInfosRemplies(request, response);
+
+        } else if (action.equals("animations")) {
+            actionAnimations(request, response);
         } else if (action.equals("enregistrer")) {
             actionEnregistrer(request, response);
         }
@@ -319,6 +334,7 @@ public class Controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
     
 
