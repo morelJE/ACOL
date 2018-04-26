@@ -4,7 +4,6 @@ import java.sql.*;
 import javax.sql.DataSource;
 import java.util.LinkedList;
 import java.util.List;
-import modele.regime;
 
 public class regimeDao {
    private DataSource ds;
@@ -34,8 +33,8 @@ public class regimeDao {
         }
     }
     
-    public List<regime> getRegimes() throws SQLException {
-        List regimes = new LinkedList();
+    public LinkedList<String> getRegimes() throws SQLException {
+        LinkedList<String> regimes = new LinkedList();
         try (Connection c = ds.getConnection()) {
             PreparedStatement p = c.prepareStatement("SELECT REGIME FROM TREGIME");
             ResultSet rs = p.executeQuery();

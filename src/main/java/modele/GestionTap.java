@@ -11,6 +11,7 @@ public class GestionTap {
         taps.add(new tap(categorie.GARDERIE1));
         taps.add(new tap(categorie.GARDERIE2));
         taps.add(new tap(categorie.GARDERIE3));
+        taps.add(new tap(categorie.GARDERIE4));
         return taps;
     }
     
