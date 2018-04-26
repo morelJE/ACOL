@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import modele.Enfant;
 
 import javax.servlet.http.HttpSession;
 
@@ -233,6 +233,20 @@ public class Controleur extends HttpServlet {
             return;
         }
     }
+    
+    private void actionFormulaireInscription(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String act = request.getParameter("action");
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            Enfant enfant = enf.getEnfant(act.substring(16));
+            request.setAttribute("enfant", enfant);
+            request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : regimes.jsp introuvable");
+            return;
+        }
+    }
         
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -265,8 +279,8 @@ public class Controleur extends HttpServlet {
             actionEnfants(request,response);
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
-        } else if (action.equals("prixTap")) {
-            //actionPrixTap(request,response);
+        } else if (action.substring(0,15).equals("allerFormulaire")) {
+            actionFormulaireInscription(request, response);
         } else if (action.equals("inforemplies")) {
             actionInfosRemplies(request, response);
         } 

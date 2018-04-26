@@ -19,17 +19,18 @@
     <body>
         <form>
         <%
-            
+            out.println("</br>");
+            out.println("\t\t\t<ul>");
             for (int i = 0; i < enfants.size(); i++) {
                 enfant =  enfants.get(i);
-                out.println(enfant.getNom());
-                out.println(enfant.getPrenom());
-                    out.println("\t\t\t<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
-                    out.println("\t\t\t\t<input type=\"submit\" value=\"Supprimer\" />");
-                    out.println("\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"allerFormulaire" + 0 + "\" />");
-                    out.println("\t\t\t</form></p>");
-                out.println("</br>");
-            }
+                out.print("\t\t\t\t<li>");
+                out.println(enfant.getPrenom() + " " + enfant.getNom());
+                out.println("\t\t\t\t<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
+                out.println("\t\t\t\t\t<input type=\"submit\" value=\"Remplir le Formulaire\" />");
+                out.println("\t\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"allerFormulaire" + enfant.getPrenom() + "\" />");
+                out.println("\t\t\t\t</form></li></br>");
+            } 
+            out.println("\t\t\t</ul>");
         %>
         </form>
     </body>

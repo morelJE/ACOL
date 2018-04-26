@@ -16,6 +16,10 @@ public class enfantsDao {
         this.login = login;
     }
     
+    public String getLogin() {
+        return this.login;
+    }
+    
     public LinkedList<Enfant> getEnfants() 
                     throws Exception {
         LinkedList<Enfant> enfants = new LinkedList();
@@ -37,5 +41,20 @@ public class enfantsDao {
         }
         
         return enfants;
+    }
+    
+    public Enfant getEnfant(String prenom) 
+                       throws Exception {
+        int i = 0;
+        Enfant enfant;
+        LinkedList<Enfant> enfants = this.getEnfants(); 
+        while (i < enfants.size()) {
+            enfant = enfants.get(i);
+            if (enfant.getPrenom().equals(prenom)) {
+                return enfant;
+            }
+            i++;
+        }
+        throw new Exception("Ce prénom n'existe pas");
     }
 }
