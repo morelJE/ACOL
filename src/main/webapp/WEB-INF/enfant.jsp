@@ -61,7 +61,19 @@
                 out.println("\t\t</ul>");
             %>
             
+            <h2>TAP</h2>
+            <select name="Jour">
+                <option value="Lundi">Lundi</option>
+                <option value="Mardi">Mardi</option>
+                <option value="Mercredi">Mercredi</option>
+                <option value="Jeudi">Jeudi</option>
+                <option value="Vendredi">Vendredi</option>
+            </select>
+            <input type="submit" name="action" value="Choisir" />
+            <input type=hidden" value="jourFormulaire"/>
             
+            
+            </br>
             <input type="submit" name="action" value="enregistrer" />
             
         </form>
