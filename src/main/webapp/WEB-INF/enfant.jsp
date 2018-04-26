@@ -55,8 +55,8 @@
                 out.println("<ul>");
                 for (int i = 0; i < regimes.size(); i++) {
                     reg = regimes.get(i);
-                    out.println("<li><label for=\"" + reg.substring(0,2) + "\">" + reg + "</label>");
-                    out.println("<input name=\"regimes\" type=\"checkbox\" id=\"" + reg.substring(0,2) + "\"/></li>");
+                    out.println("<li><label for=\"" + reg + "\">" + reg + "</label>");
+                    out.println("<input name=\"regimeSel\" type=\"checkbox\" value =\"" + reg + "\" id=\"" + reg + "\"/></li>");
                 }
                 out.println("\t\t</ul>");
             %>

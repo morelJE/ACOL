@@ -251,10 +251,13 @@ public class Controleur extends HttpServlet {
     private void actionEnregistrer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), request.getParameter("prenom"));
-            String[] regimes = request.getParameterValues("regimes");
-            
+            String prenom = request.getParameter("prenom") ; 
+            EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), prenom);
+            System.out.println("3");
+            String[] regimes = request.getParameterValues("regimeSel");
             enf.ajouteRegimes(regimes);
+            enfantsDao enfants = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            request.setAttribute("enfants", enfants);
             
             
             request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
