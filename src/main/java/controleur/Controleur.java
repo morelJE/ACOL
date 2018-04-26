@@ -20,11 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modele.Enfant;
 
 import javax.servlet.http.HttpSession;
+import modele.Animation;
+import modele.Jour;
 
 /**
  *
@@ -274,7 +277,37 @@ public class Controleur extends HttpServlet {
         }
         
     }
-
+    
+    private void actionAnimationRemplie(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        LinkedList<Jour> jours = new LinkedList<Jour>();
+        String[] j = request.getParameterValues("JourAnimation");
+        if (j.length == 0) {
+            try {
+                request.getRequestDispatcher("WEB-INF/AjoutAnimation.jsp").forward(request, response);
+            }
+            catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : Re-remplissage pour cause de jours non sélectionnés impossible");
+            return;
+            }
+        }
+        else {
+            for (String jour : j) {
+                System.out.println(jour);
+                jours.add(Jour.toEnum(jour));
+            }
+            Animation animation = new Animation(request.getParameter("nom"), jours, Integer.parseInt(request.getParameter("effectif")), Integer.parseInt(request.getParameter("prix")));
+            AnimationDao animationDao = new AnimationDao(ds, animation);
+            try {
+                animationDao.ajoutTAnimation();
+            } catch (SQLException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+                
+        
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -305,17 +338,20 @@ public class Controleur extends HttpServlet {
             actionAjouterRegime(request,response);
         } else if (action.equals("enfants")) {
             actionEnfants(request,response);
-        } else if (action.substring(0,11).equals("supprRegime")) {
-            actionSupprimerRegime(request,response);
-        } else if (action.substring(0,9).equals("allerForm")) {
-            actionFormulaireInscription(request, response);
-        } else if (action.equals("inforemplies")) {
+        }  else if (action.equals("inforemplies")) {
             actionInfosRemplies(request, response);
 
         } else if (action.equals("animations")) {
             actionAnimations(request, response);
+        } else if (action.equals("animationRemplie")) {
+            actionAnimationRemplie(request, response); 
         } else if (action.equals("enregistrer")) {
             actionEnregistrer(request, response);
+        }
+        else if (action.substring(0,11).equals("supprRegime")) {
+            actionSupprimerRegime(request,response);
+        } else if (action.substring(0,9).equals("allerForm")) {
+            actionFormulaireInscription(request, response);
         }
         else {
             System.out.println(action);
@@ -331,6 +367,8 @@ public class Controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
 
 
     
