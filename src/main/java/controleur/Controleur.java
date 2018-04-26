@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.sql.Date;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -28,6 +29,8 @@ import modele.Enfant;
 import javax.servlet.http.HttpSession;
 import modele.Animation;
 import modele.Jour;
+import modele.Periode;
+import modele.Section;
 
 /**
  *
@@ -317,6 +320,50 @@ public class Controleur extends HttpServlet {
             }
         }
     }
+    
+    private void actionAnimationPeriodeSectionRemplie(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        LinkedList<Section> sections = new LinkedList<>();
+        String[] s = request.getParameterValues("Section");
+        LinkedList<Periode> periodes = new LinkedList<>();
+        String[] p = request.getParameterValues("Periode");
+        
+        if (s.length == 0 || p.length == 0) {
+            try {
+                request.getRequestDispatcher("WEB-INF/AjoutAnimationPeriodeSection.jsp").forward(request, response);
+            }
+            catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : Re-remplissage pour cause de sections non sélectionnées impossible");
+            return;
+            }
+        }
+        else {
+            for (String section : s) {
+                sections.add(Section.stringToSection(section));
+            }
+            HttpSession session = request.getSession();
+            AnimationDao animationDao = ((AnimationDao)(session.getAttribute("animationDao")));
+            animationDao.getAnimation().setSections(sections);
+            try {
+                animationDao.ajoutAssocAnimationSection(ds);
+            } catch (SQLException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            for (String periode : p) {
+                periodes.add(new Periode(new Date(Integer.parseInt(periode.substring(0, 3))), null));
+            }
+            animationDao.getAnimation().setPeriodes(periodes);
+            try {
+                animationDao.ajoutAssocAnimationPeriode(ds);
+            } catch (SQLException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+        }
+    }
 
     private void actionChangerJourFormulaire(HttpServletRequest request, HttpServletResponse response) 
                         throws ServletException, IOException {
@@ -374,9 +421,20 @@ public class Controleur extends HttpServlet {
             actionAnimationRemplie(request, response); 
         } else if (action.equals("enregistrer")) {
             actionEnregistrer(request, response);
-        } else if (action.equals("jourFormulaire")) {
+
+        } else if (action.equals("animationPeriodeSection")) {
+            try {
+                actionAnimationPeriodeSectionRemplie(request, response);
+            } catch (Exception ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+
+        else if (action.equals("jourFormulaire")) {
             actionChangerJourFormulaire(request, response);
-        } else if (action.substring(0,11).equals("supprRegime")) {
+        }
+        else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
         } else if (action.substring(0,9).equals("allerForm")) {
             actionFormulaireInscription(request, response);
