@@ -64,9 +64,9 @@ public class enfantsDao {
                 PreparedStatement p = c.prepareStatement("SELECT ACTIVITE,PRENOM FROM ASSOCANIMATIONENFANT");
                 ResultSet rs = p.executeQuery();
                 while (rs.next()) {
-                    String nomActivite = rs.getString(1);
-                    if(nomActivite.equals(prenom)){
-                        animations.add(rs.getString(2));
+                    String participant = rs.getString(2);
+                    if(participant.equals(prenom)){
+                        animations.add(rs.getString(1));
                     }
                 }
             } catch (SQLException e) {
