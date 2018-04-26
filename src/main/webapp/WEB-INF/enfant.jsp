@@ -14,6 +14,7 @@
     private DataSource ds;
 %>
 <%
+    String Jour = (String) request.getAttribute("jour");
     Enfant enfant = (Enfant) request.getAttribute("enfant");
     Section section = enfant.getSection();
     regimeDao regDao = new regimeDao(ds);
@@ -62,15 +63,44 @@
             %>
             
             <h2>TAP</h2>
-            <select name="Jour">
-                <option value="Lundi">Lundi</option>
-                <option value="Mardi">Mardi</option>
-                <option value="Mercredi">Mercredi</option>
-                <option value="Jeudi">Jeudi</option>
-                <option value="Vendredi">Vendredi</option>
+            <%
+                out.println("<select name=\"Jour\" checked=\"" + Jour + "\">");
+            %>
+            <% 
+                out.print("<option value=\"Lundi\"");
+                if (Jour.equals("Lundi")) {
+                    out.print(" selected=\"selected\"");
+                }
+                out.println(">Lundi</option>");
+                
+                out.print("<option value=\"Mardi\"");
+                if (Jour.equals("Mardi")) {
+                    out.print(" selected=\"selected\"");
+                }
+                out.println(">Mardi</option>");
+                
+                out.print("<option value=\"Mercredi\"");
+                if (Jour.equals("Mercredi")) {
+                    out.print(" selected=\"selected\"");
+                }
+                out.println(">Mercredi</option>");
+                
+                out.print("<option value=\"Jeudi\"");
+                if (Jour.equals("Jeudi")) {
+                    out.print(" selected=\"selected\"");
+                }
+                out.println(">Jeudi</option>");
+                
+                out.print("<option value=\"Vendredi\"");
+                if (Jour.equals("Vendredi")) {
+                    out.print(" selected=\"selected\"");
+                }
+                out.println(">Vendredi</option>");
+                
+            %>
             </select>
-            <input type="submit" name="action" value="Choisir" />
-            <input type=hidden" value="jourFormulaire"/>
+            <input type="submit" value="Choisir" />
+            <input type="hidden" name="action" value="jourFormulaire"/>
             
             
             </br>
