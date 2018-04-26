@@ -20,6 +20,7 @@ public class EnfantDao {
         for (int i = 0; i < regimes.length; i++) {
             try (Connection c = ds.getConnection()) {
                 PreparedStatement p = c.prepareStatement("INSERT INTO ASSOREGIMEENFANT VALUES (?,?,?)");
+                System.out.println(regimes[i]);
                 p.setString(1, this.login);
                 p.setString(2, this.prenom);
                 p.setString(3, regimes[i]);

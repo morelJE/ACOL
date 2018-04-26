@@ -172,9 +172,11 @@ public class Controleur extends HttpServlet {
     private void actionFacture(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            request.getRequestDispatcher("WEB-INF/facture.html").forward(request, response);
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            request.setAttribute("enfants", enf);
+            request.getRequestDispatcher("WEB-INF/facture.jsp").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : facture.html introuvable");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : facture.jsp ne fonctionne pas");
             return;
         }
     }
@@ -254,10 +256,13 @@ public class Controleur extends HttpServlet {
     private void actionEnregistrer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), request.getParameter("prenom"));
-            String[] regimes = request.getParameterValues("regimes");
-            
+            String prenom = request.getParameter("prenom") ; 
+            EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), prenom);
+            System.out.println("3");
+            String[] regimes = request.getParameterValues("regimeSel");
             enf.ajouteRegimes(regimes);
+            enfantsDao enfants = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            request.setAttribute("enfants", enfants);
             
             
             request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
