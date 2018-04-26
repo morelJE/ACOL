@@ -6,16 +6,17 @@ public enum categorie {
     GARDERIE1,
     GARDERIE2,
     GARDERIE3,
+    GARDERIE4,
     ANIMATION;
     
-    private double tarifCantine = 2.5;
-    private double tarifGarderie = 1;
+    private static double tarifCantine = 2.5;
+    private static double tarifGarderie = 1;
     
-    public double getTarifCantine() {
+    public static double getTarifCantine() {
         return tarifCantine;
     }
     
-    public double getTarifGarderie() {
+    public static double getTarifGarderie() {
         return tarifGarderie;
     }
     

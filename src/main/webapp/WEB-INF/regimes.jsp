@@ -10,7 +10,7 @@
 %>
 <%
     regimeDao regDao = new regimeDao(ds);
-    List regimes = regDao.getRegimes();
+    LinkedList<String> regimes = regDao.getRegimes();
 %>
 <!DOCTYPE html>
 <html>

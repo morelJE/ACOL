@@ -247,6 +247,22 @@ public class Controleur extends HttpServlet {
             return;
         }
     }
+    
+    private void actionEnregistrer(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), request.getParameter("prenom"));
+            String[] regimes = request.getParameterValues("regimes");
+            
+            enf.ajouteRegimes(regimes);
+            
+            
+            request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfants.jsp introuvable");
+            return;
+        }
+    }
         
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -283,7 +299,9 @@ public class Controleur extends HttpServlet {
             actionFormulaireInscription(request, response);
         } else if (action.equals("inforemplies")) {
             actionInfosRemplies(request, response);
-        } 
+        } else if (action.equals("enregistrer")) {
+            actionEnregistrer(request, response);
+        }
         else {
             System.out.println(action);
         }

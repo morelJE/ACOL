@@ -1,11 +1,23 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="javax.sql.DataSource" %>
+<%@ page import="javax.annotation.Resource" %>
 <%@ page import="modele.Enfant" %>
+<%@ page import="modele.categorie" %>
 <%@ page import="dao.enfantsDao" %>
 <%@ page import="modele.Section" %>
+<%@ page import="java.util.LinkedList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="dao.regimeDao" %>
 
+<%!
+    @Resource(name = "jdbc/acol")
+    private DataSource ds;
+%>
 <%
     Enfant enfant = (Enfant) request.getAttribute("enfant");
     Section section = enfant.getSection();
+    regimeDao regDao = new regimeDao(ds);
+    LinkedList<String> regimes = regDao.getRegimes();
 %>
 <!DOCTYPE html>
 <html>
@@ -21,7 +33,11 @@
     <body>
         
         <form action="controleur" method="post" accept-charset="UTF-8">
-            <h2>Cantine</h2>
+            <%  
+                out.println("<input type=\"hidden\" name=\"prenom\" value=\"" + enfant.getPrenom() + "\"/>");
+                out.println("<h2>Cantine</h2>");
+                out.println("<h3>Tarif Cantine : " + categorie.getTarifCantine() + "€ le repas</h3>");
+            %>
             <label for="Lun">Lundi</label>
             <input name="JourCantine" type="checkbox" value="Lundi" id="Lun" />
             <label for="Mar">Mardi</label>
@@ -33,8 +49,20 @@
             <label for="Ven">Vendredi</label>
             <input name="JourCantine" type="checkbox" value="Vendredi" id="Ven"/>
             
+            <h2>Régime</h2>
+            <%
+                String reg;
+                out.println("<ul>");
+                for (int i = 0; i < regimes.size(); i++) {
+                    reg = regimes.get(i);
+                    out.println("<li><label for=\"" + reg.substring(0,2) + "\">" + reg + "</label>");
+                    out.println("<input name=\"regimes\" type=\"checkbox\" id=\"" + reg.substring(0,2) + "\"/></li>");
+                }
+                out.println("\t\t</ul>");
+            %>
             
             
+            <input type="submit" name="action" value="enregistrer" />
             
         </form>
         <%
