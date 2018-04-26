@@ -307,9 +307,17 @@ public class Controleur extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
+            HttpSession session = request.getSession();
+            session.setAttribute("animationDao", animationDao);
+        
+            try {
+                request.getRequestDispatcher("WEB-INF/AjoutAnimationPeriodeSection.jsp").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-        
+
     private void actionChangerJourFormulaire(HttpServletRequest request, HttpServletResponse response) 
                         throws ServletException, IOException {
 
@@ -326,9 +334,8 @@ public class Controleur extends HttpServlet {
             return;
         }
         
-    }        
+    }
         
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
