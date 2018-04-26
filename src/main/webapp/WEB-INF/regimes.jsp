@@ -21,17 +21,16 @@
     </head>
     <body>
         <h1>Listes des régimes</h1>
-        <form>
-            <%  out.println("<ul>");
-                for (int i = 0; i < regimes.size(); i++) {
-                    out.println("\t\t\t\t<li>" + regimes.get(i) + "<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
-                    out.println("\t\t\t\t\t<input type=\"submit\" value=\"Supprimer\" />");
-                    out.println("\t\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"supprRegime " + regimes.get(i) + "\" />");
-                    out.println("\t\t\t\t</form></li>");
-               }
-                out.println("\t\t\t</ul>");
-            %>
-        </form>
+        <%  out.println("<ul>");
+            for (int i = 0; i < regimes.size(); i++) {
+                out.println("\t\t\t<li>" + regimes.get(i) + "<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
+                out.println("\t\t\t\t<input type=\"submit\" value=\"Supprimer\" />");
+                out.println("\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"supprRegime " + regimes.get(i) + "\" />");
+                out.println("\t\t\t</form></li>");
+           }
+            out.println("\t\t</ul>");
+        %>
+        
             
 
         <h1>Ajouter un régime</h1>

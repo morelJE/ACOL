@@ -239,11 +239,11 @@ public class Controleur extends HttpServlet {
         try {
             String act = request.getParameter("action");
             enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
-            Enfant enfant = enf.getEnfant(act.substring(16));
+            Enfant enfant = enf.getEnfant(act.substring(9));
             request.setAttribute("enfant", enfant);
-            request.getRequestDispatcher("WEB-INF/regimes.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : regimes.jsp introuvable");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfant.jsp introuvable");
             return;
         }
     }
@@ -260,7 +260,7 @@ public class Controleur extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        
+       
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         if (action.equals("login")) {
@@ -279,7 +279,7 @@ public class Controleur extends HttpServlet {
             actionEnfants(request,response);
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
-        } else if (action.substring(0,15).equals("allerFormulaire")) {
+        } else if (action.substring(0,9).equals("allerForm")) {
             actionFormulaireInscription(request, response);
         } else if (action.equals("inforemplies")) {
             actionInfosRemplies(request, response);

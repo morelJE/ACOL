@@ -17,21 +17,18 @@
         <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
-        <form>
         <%
-            out.println("</br>");
-            out.println("\t\t\t<ul>");
+            out.println("\t\t<ul>");
             for (int i = 0; i < enfants.size(); i++) {
                 enfant =  enfants.get(i);
-                out.print("\t\t\t\t<li>");
+                out.print("\t\t\t<li>");
                 out.println(enfant.getPrenom() + " " + enfant.getNom());
-                out.println("\t\t\t\t<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
-                out.println("\t\t\t\t\t<input type=\"submit\" value=\"Remplir le Formulaire\" />");
-                out.println("\t\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"allerFormulaire" + enfant.getPrenom() + "\" />");
-                out.println("\t\t\t\t</form></li></br>");
+                out.println("\t\t\t<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
+                out.println("\t\t\t\t<input type=\"submit\" value=\"Remplir le Formulaire\" />");
+                out.println("\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"allerForm" + enfant.getPrenom() + "\" />");
+                out.println("\t\t\t</form></li></br>");
             } 
-            out.println("\t\t\t</ul>");
+            out.println("\t\t</ul>");
         %>
-        </form>
     </body>
 </html>
