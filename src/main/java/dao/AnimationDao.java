@@ -45,12 +45,9 @@ public class AnimationDao {
             s.setInt(3, animation.getEffectif());
             s.setInt(4, animation.getTarif());
             ResultSet r = s.executeQuery();
-        }
-        
-            
-        
-        
-        
+        }        
     }
+    
+    
     
 }

@@ -8,6 +8,8 @@
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="dao.regimeDao" %>
+<%@ page import="dao.tapDao" %>
+<%@ page import="modele.animation" %>
 
 <%!
     @Resource(name = "jdbc/acol")
@@ -19,6 +21,8 @@
     Section section = enfant.getSection();
     regimeDao regDao = new regimeDao(ds);
     LinkedList<String> regimes = regDao.getRegimes();
+    tapDao tapDao = new tapDao(ds);
+    LinkedList<animation> animations = tapDao.getAnimationsDisponibles(Jour);
 %>
 <!DOCTYPE html>
 <html>
@@ -34,6 +38,9 @@
     <body>
         
         <form action="controleur" method="post" accept-charset="UTF-8">
+            
+            <!-- CANTINE -->
+            <!------------->
             <%  
                 out.println("<input type=\"hidden\" name=\"prenom\" value=\"" + enfant.getPrenom() + "\"/>");
                 out.println("<h2>Cantine</h2>");
@@ -50,6 +57,8 @@
             <label for="Ven">Vendredi</label>
             <input name="JourCantine" type="checkbox" value="Vendredi" id="Ven"/>
             
+            <!-- REGIME -->
+            <!------------>
             <h2>Régime</h2>
             <%
                 String reg;
@@ -62,10 +71,12 @@
                 out.println("\t\t</ul>");
             %>
             
+            
             <h2>TAP</h2>
-            <%
-                out.println("<select name=\"Jour\" checked=\"" + Jour + "\">");
-            %>
+            <!-- SELECTION JOUR -->
+            <!-------------------->
+            
+            <select name="Jour">
             <% 
                 out.print("<option value=\"Lundi\"");
                 if (Jour.equals("Lundi")) {
@@ -102,6 +113,16 @@
             <input type="submit" value="Choisir" />
             <input type="hidden" name="action" value="jourFormulaire"/>
             
+            <!-- ANIMATIONS -->
+            <!---------------->
+            <%
+                animation anim;
+                for (int i = 0; i < animations.size(); i++) {
+                    anim = animations.get(i);
+                    out.println(anim.getActivite());
+                
+                }
+            %>
             
             </br>
             <input type="submit" name="action" value="enregistrer" />
