@@ -57,4 +57,21 @@ public class enfantsDao {
         }
         throw new Exception("Ce prénom n'existe pas");
     }
+    
+    public LinkedList<String> getAnimations(String prenom){
+        LinkedList<String> animations = new LinkedList();
+        try (Connection c = ds.getConnection()) {
+                PreparedStatement p = c.prepareStatement("SELECT ACTIVITE,PRENOM FROM ASSOCANIMATIONENFANT");
+                ResultSet rs = p.executeQuery();
+                while (rs.next()) {
+                    String nomActivite = rs.getString(1);
+                    if(nomActivite.equals(prenom)){
+                        animations.add(rs.getString(2));
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        return animations;
+    }
 }

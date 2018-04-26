@@ -9,7 +9,7 @@ package modele;
  *
  * @author morel2
  */
-public enum jour {
+public enum Jour {
     Lundi,
     Mardi,
     Mercredi,
