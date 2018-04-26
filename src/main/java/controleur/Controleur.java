@@ -248,6 +248,7 @@ public class Controleur extends HttpServlet {
             String act = request.getParameter("action");
             enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
             Enfant enfant = enf.getEnfant(act.substring(9));
+            request.setAttribute("jour", "lundi");
             request.setAttribute("enfant", enfant);
             request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
         } catch (Exception e) {
@@ -261,12 +262,10 @@ public class Controleur extends HttpServlet {
         try {
             String prenom = request.getParameter("prenom") ; 
             EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), prenom);
-            System.out.println("3");
             String[] regimes = request.getParameterValues("regimeSel");
             enf.ajouteRegimes(regimes);
             enfantsDao enfants = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
             request.setAttribute("enfants", enfants);
-            
             
             request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
         } catch (Exception e) {
@@ -320,9 +319,6 @@ public class Controleur extends HttpServlet {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        
-        
     }
     
     private void actionAnimationPeriodeSectionRemplie(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -369,6 +365,24 @@ public class Controleur extends HttpServlet {
         }
     }
 
+    private void actionChangerJourFormulaire(HttpServletRequest request, HttpServletResponse response) 
+                        throws ServletException, IOException {
+
+        try {
+            String prenom = request.getParameter("prenom") ; 
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            Enfant enfant = enf.getEnfant(prenom);
+            String jour = request.getParameter("Jour");
+            request.setAttribute("enfant", enfant);
+            request.setAttribute("jour", jour);
+            request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfant.jsp introuvable");
+            return;
+        }
+        
+    }
+        
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -407,12 +421,18 @@ public class Controleur extends HttpServlet {
             actionAnimationRemplie(request, response); 
         } else if (action.equals("enregistrer")) {
             actionEnregistrer(request, response);
+
         } else if (action.equals("animationPeriodeSection")) {
             try {
                 actionAnimationPeriodeSectionRemplie(request, response);
             } catch (Exception ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        
+
+        else if (action.equals("jourFormulaire")) {
+            actionChangerJourFormulaire(request, response);
         }
         else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
