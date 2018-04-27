@@ -14,7 +14,7 @@
     
 %>
 <%
-    java.sql.Date jourActuel = new java.sql.Date(2018,4,26);
+    String jourActuel = "2018-04-24";
 %>
 <!DOCTYPE html>
 <html>
@@ -24,19 +24,25 @@
         <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
-        <h1>Voici la liste des groupes pour la periode en cours</h1>
+        <h1>Voici la liste des activités pour la periode en cours</h1>
         <%
         out.println("\t\t<ul>");
+        out.println("\t\t\t<li>" + "Nous sommes le : " + jourActuel);
         try (Connection c = ds.getConnection()) {
-                        PreparedStatement p = c.prepareStatement("SELECT ACTIVITE,DEBUT FROM AssocAnimationPeriode");
+                        PreparedStatement p = c.prepareStatement("SELECT ACTIVITE,DEBUT,JOUR FROM AssocAnimationPeriode");
                         ResultSet rs = p.executeQuery();
                         while (rs.next()) {
                             String nomActivite = rs.getString(1);
-                            if(jourActuel.getSeconds() > java.sql.Date.valueOf(rs.getString(2)).getSeconds()){                                
-                                out.println("\t\t\t<li>" + "L'activité " + nomActivite + " est en cours actuellement");
+                            if(jourActuel.compareTo(rs.getString(2))>=0){                                
+                                out.println("\t\t\t<li>" + "L'activité " + nomActivite + " du " + rs.getString(3) + " est en cours actuellement");
                             }
                         }
         }
          %>
+         <form action="controleur" method="post" accept-charset="UTF-8">
+            <input type="submit" value="Retourner à l'accueil" />
+            <input type="hidden" name="action" value="retourAccueil" /></br>
+        </form> 
     </body>
+    
 </html>

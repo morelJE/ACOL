@@ -146,6 +146,16 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    private void actionRetourAccueil(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : accueil.html introuvable");
+            return;
+        }
+    }
+    
     private void actionInfos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -448,6 +458,8 @@ public class Controleur extends HttpServlet {
             actionLogin(request,response);
         } else if (action.equals("infos")) {
             actionInfos(request,response);
+        } else if (action.equals("retourAccueil")) {
+            actionRetourAccueil(request,response);
         } else if (action.equals("facture")) {
             actionFacture(request,response);
         } else if (action.equals("groupes")) {
