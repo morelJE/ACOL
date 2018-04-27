@@ -65,6 +65,10 @@
             <input type="submit" value="Envoyer" />
             <input type ="hidden" name="action" value ="animationPeriodeSection" />
         </form>
+        <form action="controleur" method="post" accept-charset="UTF-8">
+            <input type="submit" value="Retourner à l'accueil" />
+            <input type="hidden" name="action" value="retourAccueil" /></br>
+        </form> 
         
     </body>
 </html>
