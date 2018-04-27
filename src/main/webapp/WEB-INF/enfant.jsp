@@ -96,7 +96,11 @@
                 for (int i = 0; i < regimes.size(); i++) {
                     reg = regimes.get(i);
                     out.println("<li><label for=\"" + reg + "\">" + reg + "</label>");
-                    out.println("<input name=\"regimeSel\" type=\"checkbox\" value =\"" + reg + "\" id=\"" + reg + "\"/></li>");
+                    out.print("<input name=\"regimeSel\" type=\"checkbox\" value =\"" + reg + "\" id=\"" + reg + "\"");
+                    if (tapDao.isInList(regimeSel, reg)) {
+                        out.print(" checked");
+                    }
+                    out.println("/></li>");
                 }
                 out.println("\t\t</ul>");
             %>
