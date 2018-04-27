@@ -283,10 +283,11 @@ public class Controleur extends HttpServlet {
             enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
             Enfant enfant = enf.getEnfant(act.substring(10));
             EnfantDao enfdao = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), enfant.getPrenom());
-            request.setAttribute("enfant",enfdao);
+            HttpSession session = request.getSession();
+            session.setAttribute("enfant", enfdao);
             request.getRequestDispatcher("WEB-INF/annulerAnimation.jsp").forward(request, response);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : annulerAnnimation.jsp introuvable");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : annulerAnimation.jsp introuvable");
             return;
         }
     }
