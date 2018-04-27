@@ -375,22 +375,33 @@ public class Controleur extends HttpServlet {
             HttpSession session = request.getSession();
             AnimationDao animationDao = ((AnimationDao)(session.getAttribute("animationDao")));
             animationDao.getAnimation().setSections(sections);
+            
             try {
-                animationDao.ajoutAssocAnimationSection(ds);
+                animationDao.ajoutAssocAnimationSection();
             } catch (SQLException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            
             for (String periode : p) {
-                periodes.add(new Periode(new Date(Integer.parseInt(periode.substring(0, 3))), null));
+                periodes.add(new Periode(java.sql.Date.valueOf(periode), null));
             }
             animationDao.getAnimation().setPeriodes(periodes);
+            
             try {
-                animationDao.ajoutAssocAnimationPeriode(ds);
+                animationDao.ajoutAssocAnimationPeriode();
             } catch (SQLException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            try {
+                request.getRequestDispatcher("WEB-INF/AnimationJoursAnimateurs.jsp").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
+        
     }
 
 
