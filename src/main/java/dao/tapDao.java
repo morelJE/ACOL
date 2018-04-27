@@ -45,7 +45,9 @@ public class tapDao {
             return false;
         }
         for (int i = 0; i < list.length; i++) {
+            System.out.println(list[i]);
             if (mot.equals(list[i])) {
+                System.out.println("OK");
                 return true;
             }
         }
@@ -79,7 +81,6 @@ public class tapDao {
             String jour = Jour.toString(i);
             if (animations.get(i) != null) {
                 for (int j = 0; j < animations.get(i).length; j++) {
-
                     try (Connection c = ds.getConnection()) {
                         PreparedStatement p = c.prepareStatement("INSERT INTO ASSOCANIMATIONENFANT VALUES (?, ?, ?, ?)");
                         p.setString(1, animations.get(i)[j]);

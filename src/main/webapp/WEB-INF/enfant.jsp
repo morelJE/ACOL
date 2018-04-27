@@ -21,11 +21,13 @@
     Enfant enfant = (Enfant) request.getAttribute("enfant");
     String[] cantines = (String []) request.getAttribute("cantines");
     String[] regimeSel = (String []) request.getAttribute("regimes");
+    String[] listAnim = (String[]) request.getAttribute("listAnim");
     Section section = enfant.getSection();
     regimeDao regDao = new regimeDao(ds);
     LinkedList<String> regimes = regDao.getRegimes();
     tapDao tapDao = new tapDao(ds, enfant.getLogin(), enfant.getPrenom());
     LinkedList<animation> animations = tapDao.getAnimationsDisponibles(Jour, enfant.getSection());
+    out.println(Jour);
 %>
 <!DOCTYPE html>
 <html>
@@ -156,7 +158,11 @@
                 for (int i = 0; i < animations.size(); i++) {
                     anim = animations.get(i);
                     out.println("<li><label for=\"" + anim.getActivite() + "\">" + anim.getActivite() + "</label>");
-                    out.println("<input name=\"animSel\" type=\"checkbox\" value =\"" + anim.getActivite() + "\" id=\"" + anim.getActivite() + "\"/></li>");
+                    out.print("<input name=\"animSel\" type=\"checkbox\" value =\"" + anim.getActivite() + "\" id=\"" + anim.getActivite() + "\"");
+                    if (tapDao.isInList(listAnim, anim.getActivite())) {
+                        out.print(" checked");
+                    }
+                    out.println("/></li>");
                     out.println("</br>");
                 }
                 out.println("</ul></br>");

@@ -36,7 +36,7 @@ public class Controleur extends HttpServlet {
     @Resource(name = "jdbc/acol")
     private DataSource ds;
     String[] s = new String[] {};
-    LinkedList<String[]> animations = createLinkedList(s, s, s, s, s);
+    LinkedList<String[]> animations;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -260,6 +260,7 @@ public class Controleur extends HttpServlet {
     private void actionFormulaireInscription(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            animations = createLinkedList(s, s, s, s, s);
             String act = request.getParameter("action");
             enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
             Enfant enfant = enf.getEnfant(act.substring(9));
@@ -283,22 +284,20 @@ public class Controleur extends HttpServlet {
             String login = (String) request.getSession().getAttribute("utilisateur");
             
             String jourAnim = request.getParameter("jourAnim");
-            System.out.println("0");
+          
             EnfantDao enf = new EnfantDao(ds, login, prenom);
             enfantsDao enfants = new enfantsDao(ds, login);
             tapDao tapDao = new tapDao(ds, login, prenom);
             request.setAttribute("enfants", enfants);
-            System.out.println("1");
+          
             String[] regimes = request.getParameterValues("regimeSel");
             enf.ajouteRegimes(regimes);
-            System.out.println("2");
+         
             String[] cantines = request.getParameterValues("JourCantine");
             tapDao.ajouteCantine(cantines);
                    
             animations.add(Jour.toInt(jourAnim), request.getParameterValues("animSel"));
-            System.out.println("3");
             tapDao.ajouteAnimations(animations);
-            System.out.println("4");
             
             request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
         } catch (Exception e) {
@@ -320,13 +319,16 @@ public class Controleur extends HttpServlet {
             
             String[] regimes = request.getParameterValues("regimeSel");
             String[] cantines = request.getParameterValues("JourCantine");
-            
-            animations.add(Jour.toInt(jourAnim), request.getParameterValues("animSel"));
+            String [] anims = request.getParameterValues("animSel");
+            if (anims != null) {
+                animations.set(Jour.toInt(jourAnim), anims);
+            }
             
             request.setAttribute("regimes", regimes);
             request.setAttribute("cantines", cantines);
             request.setAttribute("enfant", enfant);
             request.setAttribute("jour", jour);
+            request.setAttribute("listAnim", animations.get(Jour.toInt(jour)));
            
             request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
         } catch (Exception e) {
