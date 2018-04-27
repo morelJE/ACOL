@@ -38,8 +38,8 @@
                 int i = 0;
                 out.println("</br>");
                 
-                out.println("<label for=\"" +  i + "\">" + a.getNom() + "</label>");
-                out.println("<input name=\"" + animations + "\" type=\"checkbox\" value=\"" + a.getNom() + " " + a.getJour() + "\" id=\"" + i + "\" />");
+                out.println("<label for=\"" +  i + "\">" + a.getNom() + "   " + a.getJour() + "</label>");
+                out.println("<input name=\"" + "annulation" + "\" type=\"checkbox\" value=\"" + a.getNom() + " " + a.getJour() + "\" id=\"" + i + "\" />");
                 out.println("</br>");
 
                 

@@ -474,6 +474,22 @@ public class Controleur extends HttpServlet {
         
     }
 
+    
+    private void actionAnnuler(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        HttpSession session = request.getSession();
+        EnfantDao enfantDao = ((EnfantDao)(session.getAttribute("enfant")));
+        String[] annulations = request.getParameterValues("annulation");
+        for (String a : annulations) {
+            String[] split = a.split(" ");
+            enfantDao.annulerReservation(split[0], split[1]);
+        }
+        try {
+                request.getRequestDispatcher("WEB-INF/AccueilParents.html").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
         
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -527,6 +543,8 @@ public class Controleur extends HttpServlet {
             }
         } else if (action.equals("animationJoursAnimateurs")) {
            actionPushBDD(request, response); 
+        } else if (action.equals("animationsAnnulees")) {
+           actionAnnuler(request, response);
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
         }  else if (action.substring(0,10).equals("allerAnnul")) {
@@ -549,6 +567,8 @@ public class Controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
 
     
 

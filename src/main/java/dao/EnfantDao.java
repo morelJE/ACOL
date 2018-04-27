@@ -50,9 +50,28 @@ public class EnfantDao {
                     animations.add(new Animation(rs.getString(1), Jour.toEnum(rs.getString(2))));
                     
                 }
+                c.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
+        
         return animations;
+    }
+    
+    public void annulerReservation(String animation, String jour) {
+        
+        try (Connection c = ds.getConnection()) {
+                PreparedStatement p = c.prepareStatement("DELETE FROM ASSOCANIMATIONENFANT WHERE (login=? AND activite=? AND jour=?)");
+                p.setString(1, login);
+                p.setString(2, animation);
+                p.setString(3, jour);
+                ResultSet rs = p.executeQuery();
+                
+                c.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        
+        
     }
 }
