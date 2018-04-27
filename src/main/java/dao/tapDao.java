@@ -34,6 +34,9 @@ public class tapDao {
     }
     
     public boolean isInList(String[] list, String mot) {
+        if (list==null){
+            return false;
+        }
         for (int i = 0; i < list.length; i++) {
             if (mot.equals(list[i])) {
                 return true;

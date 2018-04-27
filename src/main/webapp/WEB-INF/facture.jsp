@@ -35,7 +35,6 @@
             out.println("\t\t<ul>");
             for (int i = 0; i < enfants.size(); i++) {
                 LinkedList<String> animations = enfDao.getAnimations(enfants.get(i).getPrenom());
-                System.out.println("\t\t\t<li>" + enfants.get(i).getPrenom() +  animations.toString());
                 for(int j =0; j<animations.size();j++){
                     try (Connection c = ds.getConnection()) {
                         PreparedStatement p = c.prepareStatement("SELECT ACTIVITE,PRIX FROM TANIMATION");
@@ -43,7 +42,7 @@
                         while (rs.next()) {
                             String nomActivite = rs.getString(1);
                             if(nomActivite.equals(animations.get(j))){
-                                int prix = rs.getInt(2);
+                                double prix = rs.getDouble(2);
                                 out.println("\t\t\t<li>" + enfants.get(i).getPrenom() + " participe à l'activité : " + nomActivite + " pour un prix de " + prix + "euros.");
                                 prixTotal += prix;
                             }
