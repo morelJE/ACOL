@@ -52,7 +52,7 @@
                 for (Animateur a : animateurs) {
                     i++;
                     out.println("<label for=\"" + Jour.toString(j) + i + "\">" + a.getNom() + " " + a.getPrenom() + "</label>");
-                    out.println("<input name=\"Periode\" type=\"checkbox\" value=\"" + a.getNom() + " " + a.getPrenom() + "\" id=\"" + j + i + "\" />");
+                    out.println("<input name=\"" + Jour.toString(j) + "\" type=\"checkbox\" value=\"" + a.getNom() + " " + a.getPrenom() + "\" id=\"" + j + i + "\" />");
                     out.println("</br>");
 
                 }

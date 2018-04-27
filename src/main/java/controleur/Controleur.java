@@ -404,6 +404,29 @@ public class Controleur extends HttpServlet {
         
     }
 
+    
+    private void actionPushBDD(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        HttpSession session = request.getSession();
+        AnimationDao animationDao = ((AnimationDao)(session.getAttribute("animationDao")));
+        
+        for (Jour j : animationDao.getAnimation().getJours()) {
+            try {
+                
+                animationDao.ajoutAssocAnimationAnimateurJour(j, request.getParameterValues(Jour.toString(j)));
+                
+            } catch (SQLException ex) {
+                System.out.println("Catched exception for " + Jour.toString(j));
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                request.getRequestDispatcher("WEB-INF/AccueilMairie.html").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
 
         
     /**
@@ -451,10 +474,9 @@ public class Controleur extends HttpServlet {
             } catch (Exception ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        
-
-        else if (action.equals("jourFormulaire")) {
+        } else if (action.equals("animationJoursAnimateurs")) {
+           actionPushBDD(request, response); 
+        } else if (action.equals("jourFormulaire")) {
             actionChangerJourFormulaire(request, response);
         }
         else if (action.substring(0,11).equals("supprRegime")) {
@@ -476,6 +498,8 @@ public class Controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
 
     
 

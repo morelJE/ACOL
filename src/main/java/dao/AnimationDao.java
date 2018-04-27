@@ -101,4 +101,21 @@ public class AnimationDao {
         }
         c.close();
     }
+    
+    public void ajoutAssocAnimationAnimateurJour(Jour j, String[] animateursS) throws SQLException {
+        
+        Connection c = ds.getConnection();
+        for (String a : animateursS) {
+            String[] nomPrenom = a.split(" ");
+            PreparedStatement statement = c.prepareStatement(
+                "INSERT INTO AssocAnimationAnimateurJour VALUES(?, ?, ?, ?)"
+            );
+            statement.setString(1, this.animation.getNom());
+            statement.setString(2, nomPrenom[0]);
+            statement.setString(3, nomPrenom[1]);
+            statement.setString(4, Jour.toString(j));
+            ResultSet r = statement.executeQuery();
+        }
+        c.close();
+    }
 }
