@@ -51,6 +51,7 @@ public class CheckParentDao {
             s.setString(2, password);
             ResultSet r = s.executeQuery();
             /* r.next() renvoie vrai si et seulement si la réponse contient au moins 1 ligne */
+            //c.close();
             return r.next();
         }
         

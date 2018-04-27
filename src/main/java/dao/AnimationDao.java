@@ -51,47 +51,71 @@ public class AnimationDao {
             s.setInt(3, animation.getEffectif());
             s.setInt(4, animation.getTarif());
             ResultSet r = s.executeQuery();
-        }        
+        }
+        c.close();
     }
     
-    public void ajoutAssocAnimationSection(DataSource ds2) throws SQLException {
-        Connection c = ds2.getConnection(); 
+    public void ajoutAssocAnimationSection() throws SQLException {
+        Connection c = ds.getConnection(); 
         /* Un PreparedStatement évite les injections SQL */
         
         for (Section s : animation.getSections()) {
+            System.out.println(Section.sectionToString(s));
             for (Jour j : animation.getJours()) {
             
             PreparedStatement statement = c.prepareStatement(
                 "INSERT INTO AssocAnimationSection VALUES(?, ?, ?)"
             );
             statement.setString(1, animation.getNom());
-            statement.setString(2, j.toString());
+            statement.setString(2, Jour.toString(j));
             statement.setString(3, Section.sectionToString(s));
             
             ResultSet r = statement.executeQuery();
             }
            
         }
+        c.close();
     }
 
     
-    public void ajoutAssocAnimationPeriode(DataSource ds2) throws SQLException {
-        Connection c = ds2.getConnection(); 
+    public void ajoutAssocAnimationPeriode() throws SQLException {
+        Connection c = ds.getConnection(); 
         /* Un PreparedStatement évite les injections SQL */
         
         for (Periode p : animation.getPeriodes()) {
             for (Jour j : animation.getJours()) {
             
             PreparedStatement statement = c.prepareStatement(
-                "INSERT INTO AssocAnimationSection VALUES(?, ?, ?)"
+                "INSERT INTO AssocAnimationPeriode VALUES(?, ?, ?)"
             );
+            System.out.println(p.getDebut());
+            System.out.println(animation.getNom());
+            System.out.println(Jour.toString(j));
             statement.setDate(1, p.getDebut());
             statement.setString(2, animation.getNom());
-            statement.setString(3, j.toString());
+            statement.setString(3, Jour.toString(j));
             
             ResultSet r = statement.executeQuery();
             }
            
         }
+        c.close();
+    }
+    
+    public void ajoutAssocAnimationAnimateurJour(Jour j, String[] animateursS) throws SQLException {
+        
+        Connection c = ds.getConnection();
+        for (String a : animateursS) {
+            String[] nomPrenom = a.split(" ");
+            PreparedStatement statement = c.prepareStatement(
+                "INSERT INTO AssocAnimationAnimateurJour VALUES(?, ?, ?, ?)"
+            );
+            statement.setString(1, this.animation.getNom());
+            statement.setString(2, nomPrenom[0]);
+            statement.setString(3, nomPrenom[1]);
+            statement.setString(4, Jour.toString(j));
+            ResultSet r = statement.executeQuery();
+        }
+        c.close();
     }
 }

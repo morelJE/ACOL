@@ -71,4 +71,23 @@ public enum Jour {
                 return null;
         }
     }
+
+    public static String toString(Jour j) {
+        
+        switch (j) {
+            case Lundi :
+                return "Lundi";
+            case Mardi :
+                return "Mardi";
+            case Mercredi :
+                return "Mercredi";
+            case Jeudi : 
+                return "Jeudi";
+            case Vendredi :
+                return "Vendredi";
+                        
+        }
+        
+        return null;
+    }
 }

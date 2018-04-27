@@ -156,6 +156,16 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    private void actionRetourAccueil(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            request.getRequestDispatcher("WEB-INF/accueil.html").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : accueil.html introuvable");
+            return;
+        }
+    }
+    
     private void actionInfos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -395,24 +405,58 @@ public class Controleur extends HttpServlet {
             HttpSession session = request.getSession();
             AnimationDao animationDao = ((AnimationDao)(session.getAttribute("animationDao")));
             animationDao.getAnimation().setSections(sections);
+            
             try {
-                animationDao.ajoutAssocAnimationSection(ds);
+                animationDao.ajoutAssocAnimationSection();
             } catch (SQLException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            
             for (String periode : p) {
-                periodes.add(new Periode(new Date(Integer.parseInt(periode.substring(0, 3))), null));
+                periodes.add(new Periode(java.sql.Date.valueOf(periode), null));
             }
             animationDao.getAnimation().setPeriodes(periodes);
+            
             try {
-                animationDao.ajoutAssocAnimationPeriode(ds);
+                animationDao.ajoutAssocAnimationPeriode();
             } catch (SQLException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            try {
+                request.getRequestDispatcher("WEB-INF/AnimationJoursAnimateurs.jsp").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
+        
     }
 
+    
+    private void actionPushBDD(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        HttpSession session = request.getSession();
+        AnimationDao animationDao = ((AnimationDao)(session.getAttribute("animationDao")));
+        
+        for (Jour j : animationDao.getAnimation().getJours()) {
+            try {
+                
+                animationDao.ajoutAssocAnimationAnimateurJour(j, request.getParameterValues(Jour.toString(j)));
+                
+            } catch (SQLException ex) {
+                System.out.println("Catched exception for " + Jour.toString(j));
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                request.getRequestDispatcher("WEB-INF/AccueilMairie.html").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
 
         
     /**
@@ -434,6 +478,8 @@ public class Controleur extends HttpServlet {
             actionLogin(request,response);
         } else if (action.equals("infos")) {
             actionInfos(request,response);
+        } else if (action.equals("retourAccueil")) {
+            actionRetourAccueil(request,response);
         } else if (action.equals("facture")) {
             actionFacture(request,response);
         } else if (action.equals("groupes")) {
@@ -463,6 +509,8 @@ public class Controleur extends HttpServlet {
             } else {
                 actionEnregistrer(request, response);
             }
+        } else if (action.equals("animationJoursAnimateurs")) {
+           actionPushBDD(request, response); 
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
         } else if (action.substring(0,9).equals("allerForm")) {
@@ -481,6 +529,8 @@ public class Controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
 
     
 

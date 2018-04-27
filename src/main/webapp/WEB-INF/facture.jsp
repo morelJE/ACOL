@@ -5,8 +5,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="modele.Enfant" %>
 <%@ page import="dao.enfantsDao" %>
-<%@ page import="modele.tap" %>
-<%@ page import="dao.tapDao" %>
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="javax.sql.DataSource" %>
@@ -57,5 +55,9 @@
             out.println("\t\t</ul>");
 
         %>
+        <form action="controleur" method="post" accept-charset="UTF-8">
+            <input type="submit" value="Retourner à l'accueil" />
+            <input type="hidden" name="action" value="retourAccueil" /></br>
+        </form> 
     </body>
 </html>
