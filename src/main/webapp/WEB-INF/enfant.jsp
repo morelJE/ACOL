@@ -10,6 +10,7 @@
 <%@ page import="dao.regimeDao" %>
 <%@ page import="dao.tapDao" %>
 <%@ page import="modele.animation" %>
+<%@ page import="modele.Animation" %>
 
 <%!
     @Resource(name = "jdbc/acol")
@@ -18,6 +19,8 @@
 <%
     String Jour = (String) request.getAttribute("jour");
     Enfant enfant = (Enfant) request.getAttribute("enfant");
+    String[] cantines = (String []) request.getAttribute("cantines");
+    String[] regimeSel = (String []) request.getAttribute("regimes");
     Section section = enfant.getSection();
     regimeDao regDao = new regimeDao(ds);
     LinkedList<String> regimes = regDao.getRegimes();
@@ -46,16 +49,43 @@
                 out.println("<h2>Cantine</h2>");
                 out.println("<h3>Tarif Cantine : " + categorie.getTarifCantine() + "€ le repas</h3>");
             %>
-            <label for="Lun">Lundi</label>
-            <input name="JourCantine" type="checkbox" value="Lundi" id="Lun" />
-            <label for="Mar">Mardi</label>
-            <input name="JourCantine" type="checkbox" value="Mardi" id="Mar"/>
-            <label for="Mer">Mercredi</label>
-            <input name="JourCantine" type="checkbox" value="Mercredi" id="Mer"/>
-            <label for="Jeu">Jeudi</label>
-            <input name="JourCantine" type="checkbox" value="Jeudi" id="Jeu"/>
-            <label for="Ven">Vendredi</label>
-            <input name="JourCantine" type="checkbox" value="Vendredi" id="Ven"/>
+            
+            <%
+                out.println("<label for=\"Lun\">Lundi</label>");
+                out.print("<input name=\"JourCantine\" type=\"checkbox\" value=\"Lundi\" id=\"Lun\"");
+                if (tapDao.isInList(cantines, "Lundi")) {
+                    out.print(" checked");
+                }
+                out.println("/>");
+                
+                out.println("<label for=\"Mar\">Mardi</label>");
+                out.print("<input name=\"JourCantine\" type=\"checkbox\" value=\"Mardi\" id=\"Mar\"");
+                if (tapDao.isInList(cantines, "Mardi")) {
+                    out.print(" checked");
+                }
+                out.println("/>");
+                
+                out.println("<label for=\"Mer\">Mercredi</label>");
+                out.print("<input name=\"JourCantine\" type=\"checkbox\" value=\"Mercredi\" id=\"Mer\"");
+                if (tapDao.isInList(cantines, "Mercredi")) {
+                    out.print(" checked");
+                }
+                out.println("/>");
+                
+                out.println("<label for=\"Jeu\">Jeudi</label>");
+                out.print("<input name=\"JourCantine\" type=\"checkbox\" value=\"Jeudi\" id=\"Jeu\"");
+                if (tapDao.isInList(cantines, "Jeudi")) {
+                    out.print(" checked");
+                }
+                out.println("/>");
+                
+                out.println("<label for=\"Ven\">Vendredi</label>");
+                out.print("<input name=\"JourCantine\" type=\"checkbox\" value=\"Vendredi\" id=\"Ven\"");
+                if (tapDao.isInList(cantines, "Vendredi")) {
+                    out.print(" checked");
+                }
+                out.println("/>");                    
+            %>
             
             <!-- REGIME -->
             <!------------>
@@ -117,11 +147,14 @@
             <!---------------->
             <%
                 animation anim;
+                out.println("<ul>");
                 for (int i = 0; i < animations.size(); i++) {
                     anim = animations.get(i);
-                    out.println(anim.getActivite());
-                
+                    out.println("<li><label for=\"" + anim.getActivite() + "\">" + anim.getActivite() + "</label>");
+                    out.println("<input name=\"animSel\" type=\"checkbox\" value =\"" + anim.getActivite() + "\" id=\"" + anim.getActivite() + "\"/></li>");
+                    out.println("</br>");
                 }
+                out.println("</ul></br>");
             %>
             
             </br>

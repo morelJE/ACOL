@@ -1,36 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controleur;
 
-
-
-
-import dao.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
-import java.sql.Date;
 
+import java.sql.Date;
 import java.sql.SQLException;
+
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modele.Enfant;
 
-import javax.servlet.http.HttpSession;
+import dao.*;
 import modele.Animation;
 import modele.Jour;
 import modele.Periode;
 import modele.Section;
+import modele.Enfant;
 
 /**
  *
@@ -41,6 +35,7 @@ public class Controleur extends HttpServlet {
     
     @Resource(name = "jdbc/acol")
     private DataSource ds;
+    String[] animations;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -248,6 +243,10 @@ public class Controleur extends HttpServlet {
             String act = request.getParameter("action");
             enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
             Enfant enfant = enf.getEnfant(act.substring(9));
+            String[] regimes = {};
+            String[] cantines = {};
+            request.setAttribute("regimes", regimes);
+            request.setAttribute("cantines", cantines);
             request.setAttribute("jour", "lundi");
             request.setAttribute("enfant", enfant);
             request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
@@ -262,16 +261,48 @@ public class Controleur extends HttpServlet {
         try {
             String prenom = request.getParameter("prenom") ; 
             EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), prenom);
+            enfantsDao enfants = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            tapDao tapDao = new tapDao(ds);
+            request.setAttribute("enfants", enfants);
+            
             String[] regimes = request.getParameterValues("regimeSel");
             enf.ajouteRegimes(regimes);
-            enfantsDao enfants = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
-            request.setAttribute("enfants", enfants);
+            
+            String[] cantines = request.getParameterValues("JourCantine");
+            tapDao.ajouteCantine(cantines);
+                    
+            String[] animations = request.getParameterValues("animSel");
+//            tapDao.ajouteAnimations(animations);           
+            
             
             request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfants.jsp introuvable");
             return;
         }
+    }
+    
+    private void actionChangerJourFormulaire(HttpServletRequest request, HttpServletResponse response) 
+                        throws ServletException, IOException {
+        try {
+            String prenom = request.getParameter("prenom") ;
+            String jour = request.getParameter("Jour");
+            
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            Enfant enfant = enf.getEnfant(prenom);
+            
+            String[] regimes = request.getParameterValues("regimeSel");
+            String[] cantines = request.getParameterValues("JourCantine");
+            
+            request.setAttribute("regimes", regimes);
+            request.setAttribute("cantines", cantines);
+            request.setAttribute("enfant", enfant);
+            request.setAttribute("jour", jour);
+            request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfant.jsp introuvable");
+            return;
+        } 
     }
         
     private void actionAnimations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -359,29 +390,10 @@ public class Controleur extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
-            
         }
     }
 
-    private void actionChangerJourFormulaire(HttpServletRequest request, HttpServletResponse response) 
-                        throws ServletException, IOException {
 
-        try {
-            String prenom = request.getParameter("prenom") ; 
-            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
-            Enfant enfant = enf.getEnfant(prenom);
-            String jour = request.getParameter("Jour");
-            request.setAttribute("enfant", enfant);
-            request.setAttribute("jour", jour);
-            request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfant.jsp introuvable");
-            return;
-        }
-        
-    }
         
     /**
      * Handles the HTTP <code>POST</code> method.

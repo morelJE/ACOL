@@ -7,6 +7,8 @@ import modele.animation;
 
 public class tapDao {
     private DataSource ds;
+    private String login;
+    private String prenom;
    
     public tapDao(DataSource ds) {
         this.ds = ds;
@@ -29,5 +31,22 @@ public class tapDao {
             System.out.println(e.getMessage());
         }
         return animations;
+    }
+    
+    public boolean isInList(String[] list, String mot) {
+        for (int i = 0; i < list.length; i++) {
+            if (mot.equals(list[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void ajouteCantine(String[] cantines) {
+        
+    }
+    
+    public void ajouteAnimations(String[] animations) {
+        
     }
 }
