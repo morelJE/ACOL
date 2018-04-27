@@ -281,7 +281,7 @@ public class Controleur extends HttpServlet {
         try {
             String act = request.getParameter("action");
             enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
-            Enfant enfant = enf.getEnfant(act.substring(9));
+            Enfant enfant = enf.getEnfant(act.substring(10));
             EnfantDao enfdao = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), enfant.getPrenom());
             request.setAttribute("enfant",enfdao);
             request.getRequestDispatcher("WEB-INF/annulerAnimation.jsp").forward(request, response);
@@ -528,11 +528,13 @@ public class Controleur extends HttpServlet {
            actionPushBDD(request, response); 
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
-        } else if (action.substring(0,9).equals("allerForm")) {
-            actionFormulaireInscription(request, response);
-        } else if (action.substring(0,9).equals("allerFormAnnul")) {
+        }  else if (action.substring(0,10).equals("allerAnnul")) {
             actionFormulaireAnnulation(request, response);
-        } else {
+        } 
+        else if (action.substring(0,9).equals("allerForm")) {
+            actionFormulaireInscription(request, response);
+        }
+        else {
             System.out.println(action);
         }
     }
