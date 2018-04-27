@@ -34,7 +34,7 @@ public class enfantsDao {
                 nom = rs.getString(1);
                 prenom = rs.getString(2);
                 section = Section.stringToSection(rs.getString(3));
-                enfants.add(new Enfant(nom, prenom, section));
+                enfants.add(new Enfant(nom, prenom, section, this.login));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

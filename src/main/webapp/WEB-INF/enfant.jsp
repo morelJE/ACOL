@@ -24,8 +24,8 @@
     Section section = enfant.getSection();
     regimeDao regDao = new regimeDao(ds);
     LinkedList<String> regimes = regDao.getRegimes();
-    tapDao tapDao = new tapDao(ds);
-    LinkedList<animation> animations = tapDao.getAnimationsDisponibles(Jour);
+    tapDao tapDao = new tapDao(ds, enfant.getLogin(), enfant.getPrenom());
+    LinkedList<animation> animations = tapDao.getAnimationsDisponibles(Jour, enfant.getSection());
 %>
 <!DOCTYPE html>
 <html>
@@ -145,6 +145,7 @@
             %>
             </select>
             <input type="submit" value="Choisir" />
+            
             <input type="hidden" name="action" value="jourFormulaire"/>
             
             <!-- ANIMATIONS -->
@@ -159,14 +160,13 @@
                     out.println("</br>");
                 }
                 out.println("</ul></br>");
+                out.println("<input type=\"hidden\" name=\"jourAnim\" value=\""+ Jour + "\"/>");
             %>
             
+            
             </br>
-            <input type="submit" name="action" value="enregistrer" />
+            <input type="submit" name="actionSwag" value="enregistrer" />
             
         </form>
-        <%
-             
-        %>
     </body>
 </html>
