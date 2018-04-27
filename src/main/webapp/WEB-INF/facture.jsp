@@ -5,8 +5,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="modele.Enfant" %>
 <%@ page import="dao.enfantsDao" %>
-<%@ page import="modele.tap" %>
-<%@ page import="dao.tapDao" %>
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="javax.sql.DataSource" %>
