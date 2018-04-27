@@ -277,6 +277,22 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    private void actionFormulaireAnnulation(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String act = request.getParameter("action");
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            Enfant enfant = enf.getEnfant(act.substring(10));
+            EnfantDao enfdao = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), enfant.getPrenom());
+            HttpSession session = request.getSession();
+            session.setAttribute("enfant", enfdao);
+            request.getRequestDispatcher("WEB-INF/annulerAnimation.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : annulerAnimation.jsp introuvable");
+            return;
+        }
+    }
+    
     private void actionEnregistrer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -460,6 +476,22 @@ public class Controleur extends HttpServlet {
         
     }
 
+    
+    private void actionAnnuler(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        HttpSession session = request.getSession();
+        EnfantDao enfantDao = ((EnfantDao)(session.getAttribute("enfant")));
+        String[] annulations = request.getParameterValues("annulation");
+        for (String a : annulations) {
+            String[] split = a.split(" ");
+            enfantDao.annulerReservation(split[0], split[1]);
+        }
+        try {
+                request.getRequestDispatcher("WEB-INF/AccueilParents.html").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
         
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -513,11 +545,17 @@ public class Controleur extends HttpServlet {
             }
         } else if (action.equals("animationJoursAnimateurs")) {
            actionPushBDD(request, response); 
+        } else if (action.equals("animationsAnnulees")) {
+           actionAnnuler(request, response);
         } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
-        } else if (action.substring(0,9).equals("allerForm")) {
+        }  else if (action.substring(0,10).equals("allerAnnul")) {
+            actionFormulaireAnnulation(request, response);
+        } 
+        else if (action.substring(0,9).equals("allerForm")) {
             actionFormulaireInscription(request, response);
-        } else {
+        }
+        else {
             System.out.println(action);
         }
     }
@@ -531,6 +569,8 @@ public class Controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
 
     
 

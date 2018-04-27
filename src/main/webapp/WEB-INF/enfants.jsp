@@ -27,6 +27,10 @@
                 out.println("\t\t\t\t<input type=\"submit\" value=\"Remplir le Formulaire\" />");
                 out.println("\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"allerForm" + enfant.getPrenom() + "\" />");
                 out.println("\t\t\t</form></li></br>");
+                out.println("\t\t\t<form action=\"controleur\" method= \"post\" accept-charset=\"UTF-8\">");
+                out.println("\t\t\t\t<input type=\"submit\" value=\"Annuler une inscription\" />");
+                out.println("\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"allerAnnul" + enfant.getPrenom() + "\" />");
+                out.println("\t\t\t</form></li></br>");
             } 
             out.println("\t\t</ul>");
         %>

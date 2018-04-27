@@ -19,6 +19,7 @@ public class Animation {
     private int tarif;
     private LinkedList<Section> sections;
     private LinkedList<Periode> periodes;
+    private Jour jour;
     
     public Animation(String nom, LinkedList<Jour> jours, int effectif, int tarif) {
         
@@ -26,6 +27,13 @@ public class Animation {
         this.jours = jours;
         this.effectif = effectif;
         this.tarif = tarif;
+        
+    }
+    
+    public Animation(String nom, Jour jour) {
+        
+        this.nom = nom;
+        this.jour = jour;
         
     }
     
@@ -59,5 +67,9 @@ public class Animation {
     
     public LinkedList<Periode> getPeriodes() {
         return this.periodes;
+    }
+    
+    public String getJour() {
+        return Jour.toString(jour);
     }
 }

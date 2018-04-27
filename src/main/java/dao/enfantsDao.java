@@ -61,11 +61,11 @@ public class enfantsDao {
     public LinkedList<String> getAnimations(String prenom){
         LinkedList<String> animations = new LinkedList();
         try (Connection c = ds.getConnection()) {
-                PreparedStatement p = c.prepareStatement("SELECT ACTIVITE,PRENOM FROM ASSOCANIMATIONENFANT");
+                PreparedStatement p = c.prepareStatement("SELECT ACTIVITE,PRENOM,LOGIN FROM ASSOCANIMATIONENFANT");
                 ResultSet rs = p.executeQuery();
                 while (rs.next()) {
                     String participant = rs.getString(2);
-                    if(participant.equals(prenom)){
+                    if(participant.equals(prenom) && login.equals(rs.getString(3))){
                         animations.add(rs.getString(1));
                     }
                 }
