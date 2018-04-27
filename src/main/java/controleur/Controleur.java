@@ -276,6 +276,21 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    private void actionFormulaireAnnulation(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String act = request.getParameter("action");
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            Enfant enfant = enf.getEnfant(act.substring(9));
+            EnfantDao enfdao = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), enfant.getPrenom());
+            request.setAttribute("enfant",enfdao);
+            request.getRequestDispatcher("WEB-INF/annulerAnimation.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : annulerAnnimation.jsp introuvable");
+            return;
+        }
+    }
+    
     private void actionEnregistrer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -515,6 +530,8 @@ public class Controleur extends HttpServlet {
             actionSupprimerRegime(request,response);
         } else if (action.substring(0,9).equals("allerForm")) {
             actionFormulaireInscription(request, response);
+        } else if (action.substring(0,9).equals("allerFormAnnul")) {
+            actionFormulaireAnnulation(request, response);
         } else {
             System.out.println(action);
         }
