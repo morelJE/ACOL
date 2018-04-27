@@ -35,7 +35,8 @@ public class Controleur extends HttpServlet {
     
     @Resource(name = "jdbc/acol")
     private DataSource ds;
-    String[] animations;
+    String[] s = new String[] {};
+    LinkedList<String[]> animations = createLinkedList(s, s, s, s, s);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,6 +47,7 @@ public class Controleur extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -79,6 +81,14 @@ public class Controleur extends HttpServlet {
         if (action == null) {
             actionAccueil(request, response);
         }      
+    }
+    
+    public static <T> LinkedList<T> createLinkedList(T...elements) {
+        LinkedList<T> newList = new LinkedList<T>();
+        for (T el : elements) {
+            newList.add(el);
+        }
+        return newList;
     }
     
     private void actionAccueil(HttpServletRequest request, HttpServletResponse response)
@@ -266,24 +276,44 @@ public class Controleur extends HttpServlet {
         }
     }
     
+    private void actionFormulaireAnnulation(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String act = request.getParameter("action");
+            enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
+            Enfant enfant = enf.getEnfant(act.substring(9));
+            EnfantDao enfdao = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), enfant.getPrenom());
+            request.setAttribute("enfant",enfdao);
+            request.getRequestDispatcher("WEB-INF/annulerAnimation.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : annulerAnnimation.jsp introuvable");
+            return;
+        }
+    }
+    
     private void actionEnregistrer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             String prenom = request.getParameter("prenom") ; 
-            EnfantDao enf = new EnfantDao(ds, (String) request.getSession().getAttribute("utilisateur"), prenom);
-            enfantsDao enfants = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
-            tapDao tapDao = new tapDao(ds);
-            request.setAttribute("enfants", enfants);
+            String login = (String) request.getSession().getAttribute("utilisateur");
             
+            String jourAnim = request.getParameter("jourAnim");
+            System.out.println("0");
+            EnfantDao enf = new EnfantDao(ds, login, prenom);
+            enfantsDao enfants = new enfantsDao(ds, login);
+            tapDao tapDao = new tapDao(ds, login, prenom);
+            request.setAttribute("enfants", enfants);
+            System.out.println("1");
             String[] regimes = request.getParameterValues("regimeSel");
             enf.ajouteRegimes(regimes);
-            
+            System.out.println("2");
             String[] cantines = request.getParameterValues("JourCantine");
             tapDao.ajouteCantine(cantines);
-                    
-            String[] animations = request.getParameterValues("animSel");
-//            tapDao.ajouteAnimations(animations);           
-            
+                   
+            animations.add(Jour.toInt(jourAnim), request.getParameterValues("animSel"));
+            System.out.println("3");
+            tapDao.ajouteAnimations(animations);
+            System.out.println("4");
             
             request.getRequestDispatcher("WEB-INF/enfants.jsp").forward(request, response);
         } catch (Exception e) {
@@ -297,6 +327,8 @@ public class Controleur extends HttpServlet {
         try {
             String prenom = request.getParameter("prenom") ;
             String jour = request.getParameter("Jour");
+            String jourAnim = request.getParameter("jourAnim");
+           
             
             enfantsDao enf = new enfantsDao(ds, (String) request.getSession().getAttribute("utilisateur"));
             Enfant enfant = enf.getEnfant(prenom);
@@ -304,10 +336,13 @@ public class Controleur extends HttpServlet {
             String[] regimes = request.getParameterValues("regimeSel");
             String[] cantines = request.getParameterValues("JourCantine");
             
+            animations.add(Jour.toInt(jourAnim), request.getParameterValues("animSel"));
+            
             request.setAttribute("regimes", regimes);
             request.setAttribute("cantines", cantines);
             request.setAttribute("enfant", enfant);
             request.setAttribute("jour", jour);
+           
             request.getRequestDispatcher("WEB-INF/enfant.jsp").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "erreur : enfant.jsp introuvable");
@@ -451,7 +486,7 @@ public class Controleur extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-       
+        
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         if (action.equals("login")) {
@@ -472,31 +507,32 @@ public class Controleur extends HttpServlet {
             actionEnfants(request,response);
         }  else if (action.equals("inforemplies")) {
             actionInfosRemplies(request, response);
-
         } else if (action.equals("animations")) {
             actionAnimations(request, response);
         } else if (action.equals("animationRemplie")) {
             actionAnimationRemplie(request, response); 
-        } else if (action.equals("enregistrer")) {
-            actionEnregistrer(request, response);
-
         } else if (action.equals("animationPeriodeSection")) {
             try {
                 actionAnimationPeriodeSectionRemplie(request, response);
             } catch (Exception ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else if (action.equals("jourFormulaire")) {
+            String actionSwag = request.getParameter("actionSwag");
+            if (actionSwag == null) {
+                actionChangerJourFormulaire(request, response);
+            } else {
+                actionEnregistrer(request, response);
+            }
         } else if (action.equals("animationJoursAnimateurs")) {
            actionPushBDD(request, response); 
-        } else if (action.equals("jourFormulaire")) {
-            actionChangerJourFormulaire(request, response);
-        }
-        else if (action.substring(0,11).equals("supprRegime")) {
+        } else if (action.substring(0,11).equals("supprRegime")) {
             actionSupprimerRegime(request,response);
         } else if (action.substring(0,9).equals("allerForm")) {
             actionFormulaireInscription(request, response);
-        }
-        else {
+        } else if (action.substring(0,9).equals("allerFormAnnul")) {
+            actionFormulaireAnnulation(request, response);
+        } else {
             System.out.println(action);
         }
     }

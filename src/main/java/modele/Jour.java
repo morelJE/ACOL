@@ -38,6 +38,40 @@ public enum Jour {
         }
     }
     
+    public static int toInt(String j) {
+        switch (j) {
+            case "Lundi":
+                return 0;
+            case "Mardi":
+                return 1;
+            case "Mercredi":
+                return 2;
+            case "Jeudi":
+                return 3;
+            case "Vendredi":
+                return 4;
+            default:
+                return 5;
+        }
+    }
+    
+    public static String toString(int i) {
+        switch (i) {
+            case 0:
+                return "Lundi";
+            case 1:
+                return "Mardi";
+            case 2:
+                return "Mercredi";               
+            case 3:
+                return "Jeudi";                
+            case 4:
+                return "Vendredi";                
+            default:
+                return null;
+        }
+    }
+
     public static String toString(Jour j) {
         
         switch (j) {

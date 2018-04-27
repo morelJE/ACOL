@@ -19,6 +19,9 @@ public class EnfantDao {
     
     public void ajouteRegimes(String[] regimes)
                     throws SQLException {
+        if (regimes == null) {
+            return;
+        }
         for (int i = 0; i < regimes.length; i++) {
             try (Connection c = ds.getConnection()) {
                 PreparedStatement p = c.prepareStatement("INSERT INTO ASSOREGIMEENFANT VALUES (?,?,?)");

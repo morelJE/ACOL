@@ -43,6 +43,7 @@
                                 double prix = rs.getDouble(2);
                                 out.println("\t\t\t<li>" + enfants.get(i).getPrenom() + " participe à l'activité : " + nomActivite + " pour un prix de " + prix + "euros.");
                                 prixTotal += prix;
+                                break;
                             }
                     }
                 } catch (SQLException e) {
@@ -51,7 +52,7 @@
             }
             }
             out.println("\t\t<ul>");
-            out.println("\t\t\t<li>" + "Vous allez donc devoir payer : " + prixTotal + " euros.");
+            out.println("\t\t\t<li>" + "Vous allez donc devoir payer : " + prixTotal + " euros pour cette semaine.");
             out.println("\t\t</ul>");
 
         %>
